@@ -23,7 +23,7 @@ getwd()
 list.files()
 list.files("Data")
 
-Genes_139_upset <- readxl::read_excel("../Data/Genes_139_upset.xlsx")
+Genes_139_upset <- readxl::read_excel("Data/Genes_139_upset.xlsx")
 
 View(Genes_139_upset) #checking that the correct data is loaded
 str(Genes_139_upset) # structure of the variables, seeing that there is the binary 0,1 matrix
