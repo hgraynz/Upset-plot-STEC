@@ -18,17 +18,22 @@ library(readxl)
 ## Data
 
 ```{r data_and_setup}
-O157 <- read_excel("Data/Genes_139_upset.xlsx")
+# knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+getwd()
+list.files()
+list.files("Data")
 
-View(O157) #checking that the correct data is loaded
-str(O157) # structure of the variables, seeing that there is the binary 0,1 matrix
+Genes_139_upset <- readxl::read_excel("../Data/Genes_139_upset.xlsx")
+
+View(Genes_139_upset) #checking that the correct data is loaded
+str(Genes_139_upset) # structure of the variables, seeing that there is the binary 0,1 matrix
 
 #specifying names used for the antibiotic labels (order is important for the genes, it needs to be reversed here to appear in the order you want)
 gene <- c("stx2c", "stx2a", "stx1a", "hlyE", "ehxA", "eae") 
 
 names(gene) <- gene 
 
-O157$Site<- factor(O157$Site, levels=c("Farm", "Lairage", "Hide", "Pre-intervention", "Post-intervention"))
+Genes_139_upset$Site<- factor(Genes_139_upset$Site, levels=c("Farm", "Lairage", "Hide", "Pre-intervention", "Post-intervention"))
 
 ```
 
@@ -38,8 +43,8 @@ O157$Site<- factor(O157$Site, levels=c("Farm", "Lairage", "Hide", "Pre-intervent
 # constructing the plot with ggplot2 
 par(oma=c(0,0,2,0))
 
-O157_upset<-upset(
-  O157,
+Genes_139_upset_upset<-upset(
+  Genes_139_upset,
   gene,
   name = "Virulence gene combination", 
   base_annotations=list(
@@ -58,7 +63,7 @@ O157_upset<-upset(
 ) & scale_fill_manual(values = c("#88ccee", "#44aa99", "#DDCC77", "#cc6677", "#332288")) 
 
 
-ggsave(file="Figures/Genes_139_upset_23Feb26.svg", plot=O157_upset, width=12)
+ggsave(file="../Figures/Genes_139_upset_23Feb26.svg", plot=Genes_139_upset_upset, width=12)
 
 #export as 1000 x 813 soemthing (updates automatically) 
 
