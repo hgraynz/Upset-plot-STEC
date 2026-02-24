@@ -1,0 +1,90 @@
+---
+title: "Upset plot quarto"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+## Libraries
+
+```{r librarys}
+# Loading Libraries
+library(ggplot2) 
+library(RColorBrewer) 
+library(ComplexUpset) 
+library(readxl)
+```
+
+## Data
+
+```{r data_and_setup}
+# knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+getwd()
+list.files()
+list.files("Data")
+
+Genes_139_upset <- readxl::read_excel("Data/Genes_139_upset.xlsx")
+
+View(Genes_139_upset) #checking that the correct data is loaded
+str(Genes_139_upset) # structure of the variables, seeing that there is the binary 0,1 matrix
+
+#specifying names used for the antibiotic labels (order is important for the genes, it needs to be reversed here to appear in the order you want)
+gene <- c("stx2c", "stx2a", "stx1a", "hlyE", "ehxA", "eae") 
+
+names(gene) <- gene 
+
+Genes_139_upset$Site<- factor(Genes_139_upset$Site, levels=c("Farm", "Lairage", "Hide", "Pre-intervention", "Post-intervention"))
+
+```
+
+## Plot
+
+```{r plotting_and_saving}
+# constructing the plot with ggplot2 
+par(oma=c(0,0,2,0))
+
+Genes_139_upset_upset<-upset(
+  Genes_139_upset,
+  gene,
+  name = "Virulence gene combination", 
+  base_annotations=list(
+    'Intersection size'=intersection_size(
+      counts=TRUE,
+      mapping=aes(fill=Site)
+    )
+    + geom_bar(stat="identity") 
+    + ylab('Number of isolates')
+    + labs(fill = "Sample site") +
+      scale_y_continuous(breaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100)) 
+  ), 
+  sort_sets=F,
+  width_ratio=0.1,
+  stripes='white'
+) & scale_fill_manual(values = c("#88ccee", "#44aa99", "#DDCC77", "#cc6677", "#332288")) 
+
+
+ggsave(file="../Figures/Genes_139_upset_23Feb26.svg", plot=Genes_139_upset_upset, width=12)
+
+#export as 1000 x 813 soemthing (updates automatically) 
+
+```
