@@ -49,7 +49,7 @@ View(Genes_139_upset) #checking that the correct data is loaded
 str(Genes_139_upset) # structure of the variables, seeing that there is the binary 0,1 matrix
 
 #specifying names used for the antibiotic labels (order is important for the genes, it needs to be reversed here to appear in the order you want)
-gene <- c("stx2c", "stx2a", "stx1a", "hlyE", "ehxA", "eae") 
+gene <- c("stx2c", "stx2a", "stx1a", "ehxA", "eae") 
 
 names(gene) <- gene 
 
@@ -83,7 +83,7 @@ Genes_139_upset_upset<-upset(
 ) & scale_fill_manual(values = c("#88ccee", "#44aa99", "#DDCC77", "#cc6677", "#332288")) 
 
 
-ggsave(file="../Figures/Genes_139_upset_23Feb26.svg", plot=Genes_139_upset_upset, width=12)
+ggsave(file="Figures/Genes_139_upset_23Feb26.svg", plot=Genes_139_upset_upset, width=12)
 
 #export as 1000 x 813 soemthing (updates automatically) 
 
